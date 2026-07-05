@@ -4,19 +4,6 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.Entity
 {
-    /// <summary>
-    /// The presence that wears the face of the one who was lost. It does not
-    /// chase to harm. It moves toward the player with an open hand: it wants to
-    /// be acknowledged, to be let close, to forgive.
-    ///
-    /// It moves faster as grief rises, so running from it literally makes it
-    /// gain on you. When it reaches the player it does not attack; it reaches
-    /// out. In this starter build that "embrace" just logs and pauses, ready
-    /// for you to hook up the memory-recovery beat.
-    ///
-    /// Movement is a plain MoveTowards so no NavMesh setup is required to test.
-    /// For real navigation around the house, swap in a NavMeshAgent later.
-    /// </summary>
     public class GriefEntity : MonoBehaviour
     {
         [Header("Target")]
@@ -64,7 +51,6 @@ namespace GriefHorror.Entity
             float grief = GriefMeter.Instance != null ? GriefMeter.Instance.Grief : 0f;
             float speed = baseSpeed + griefSpeedBonus * grief;
 
-            // Keep the presence on its own height plane; only follow the player horizontally.
             Vector3 targetOnPlane = new Vector3(target.position.x, transform.position.y, target.position.z);
             transform.position = Vector3.MoveTowards(transform.position, targetOnPlane, speed * Time.deltaTime);
 
