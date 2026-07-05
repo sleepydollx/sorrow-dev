@@ -4,22 +4,6 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.UI
 {
-    /// <summary>
-    /// A screen-edge darkness that closes in as grief rises — the world quietly
-    /// mattering less, shrinking to a pinhole. As the player confronts memories
-    /// and grief falls, the edges open back up.
-    ///
-    /// This is a better read-out of grief than a numeric bar: it makes the
-    /// hidden meter *felt* rather than displayed. It also pairs with the
-    /// Flashlight — running dims the beam AND closes the world in at once.
-    ///
-    /// Builds its own Canvas + full-screen Image at runtime and generates the
-    /// radial gradient texture in code, so no sprite or asset is needed. Just
-    /// drop this on any active GameObject (e.g. an empty "UI" object).
-    ///
-    /// Degrades gracefully: with no GriefMeter in the scene it simply holds at
-    /// its minimum strength.
-    /// </summary>
     public class GriefVignette : MonoBehaviour
     {
         [Header("Look")]
