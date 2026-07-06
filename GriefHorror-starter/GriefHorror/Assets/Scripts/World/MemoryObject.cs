@@ -4,14 +4,6 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.World
 {
-    /// <summary>
-    /// A single memory the player is meant to face instead of avoid: a photo,
-    /// a half-painted wall, the second coffee cup, the unfinished suitcase.
-    ///
-    /// Confronting it is the counter-move to running. It eases the grief and
-    /// advances the story (one more piece of the voicemail becomes hearable).
-    /// A memory can only be confronted once.
-    /// </summary>
     public class MemoryObject : Interactable
     {
         [Header("Memory")]
@@ -41,7 +33,6 @@ namespace GriefHorror.World
             if (advancesStory && GameManager.Instance != null)
                 GameManager.Instance.RegisterTruthFaced();
 
-            // For now, the memory speaks to the console. Replace with subtitle UI / voice audio.
             Debug.Log($"[Memory] {memoryLine}");
 
             OnConfronted?.Invoke();
