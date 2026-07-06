@@ -4,19 +4,6 @@ using GriefHorror.World;
 
 namespace GriefHorror.Player
 {
-    /// <summary>
-    /// Basic first-person movement, mouse look, and interaction.
-    ///
-    /// Holding the run key increases speed but reports to the GriefMeter, which
-    /// is the whole point: fleeing is fast and feels safe, and it is exactly
-    /// what makes the game worse. Later you can add stamina, headbob, footstep
-    /// audio, and a proper camera rig, but this is enough to walk the house and
-    /// test the core loop.
-    ///
-    /// Uses Unity's built-in Input Manager (Input.GetAxis) so it runs with no
-    /// extra package setup. If you move to the new Input System, this is the
-    /// script to rewrite.
-    /// </summary>
     [RequireComponent(typeof(CharacterController))]
     public class FirstPersonController : MonoBehaviour
     {
