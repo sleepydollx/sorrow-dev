@@ -32,7 +32,7 @@ namespace GriefHorror.World
 
             if (advancesStory && GameManager.Instance != null)
                 GameManager.Instance.RegisterTruthFaced();
-
+                
             Debug.Log($"[Memory] {memoryLine}");
 
             OnConfronted?.Invoke();
