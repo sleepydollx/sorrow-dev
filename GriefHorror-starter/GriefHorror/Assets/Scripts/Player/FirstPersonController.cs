@@ -66,7 +66,6 @@ namespace GriefHorror.Player
 
             float speed = isFleeing ? runSpeed : walkSpeed;
 
-            // Running away is what feeds the grief.
             if (isFleeing && GriefMeter.Instance != null)
                 GriefMeter.Instance.ReportFleeing();
 
