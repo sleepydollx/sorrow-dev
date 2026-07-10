@@ -3,16 +3,6 @@ using UnityEngine;
 
 namespace GriefHorror.Systems
 {
-    /// <summary>
-    /// Tracks the one thread that ties the whole game together: the voicemail
-    /// the player has never been able to listen to all the way through.
-    ///
-    /// Each memory the player confronts unlocks one more piece of it. When every
-    /// truth has been faced, the message can finally be heard in full — and it
-    /// turns out not to be an accusation at all. This manager just counts the
-    /// progress and announces milestones; the actual audio, subtitles, and
-    /// ending scene hook onto its events.
-    /// </summary>
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }

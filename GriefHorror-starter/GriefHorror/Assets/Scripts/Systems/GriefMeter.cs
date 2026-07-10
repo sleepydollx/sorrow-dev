@@ -3,19 +3,6 @@ using UnityEngine;
 
 namespace GriefHorror.Systems
 {
-    /// <summary>
-    /// The emotional core of the game, expressed as a system.
-    ///
-    /// Grief rises while the player runs away, and falls only when the player
-    /// stops and confronts a memory. Every other system listens to this value:
-    /// the presence moves faster as grief rises, the house grows colder and
-    /// darker, the world closes in. Running is meant to feel like relief and to
-    /// quietly make everything worse.
-    ///
-    /// Kept as a lightweight singleton so any script can read or affect grief
-    /// without wiring references everywhere. Pragmatic for a small solo project;
-    /// swap for a ScriptableObject or event bus later if it grows.
-    /// </summary>
     public class GriefMeter : MonoBehaviour
     {
         public static GriefMeter Instance { get; private set; }
