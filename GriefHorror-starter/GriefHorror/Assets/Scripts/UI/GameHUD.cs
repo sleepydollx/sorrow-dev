@@ -6,25 +6,6 @@ using GriefHorror.World;
 
 namespace GriefHorror.UI
 {
-    /// <summary>
-    /// The in-game HUD, built entirely in code at runtime — the mockup made real:
-    /// a faint center reticle, a contextual interaction prompt that appears only
-    /// when you look at something you can face, and a row of small marks tracking
-    /// the voicemail you could never finish (one fills each time a memory is
-    /// faced, read from the GameManager).
-    ///
-    /// Deliberately minimal: nothing sits on screen unless it needs to. Grief
-    /// itself is shown by the GriefVignette, not here.
-    ///
-    /// Setup: drop this on any active GameObject (e.g. the same "UI" object as
-    /// GriefVignette). It creates its own Canvas — no manual UI required.
-    ///
-    /// Subtitles: call GameHUD.Instance.ShowSubtitle("...") from anywhere to make
-    /// a line appear at the bottom. See the MemoryObject wire-up note below.
-    ///
-    /// Uses the legacy UI.Text with Unity's built-in font (LegacyRuntime.ttf,
-    /// present in Unity 2022+). On older Unity the built-in font is "Arial.ttf".
-    /// </summary>
     public class GameHUD : MonoBehaviour
     {
         public static GameHUD Instance { get; private set; }

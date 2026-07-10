@@ -5,19 +5,6 @@ using UnityEngine.SceneManagement;
 
 namespace GriefHorror.UI
 {
-    /// <summary>
-    /// The title screen, built in code — the mockup's opening made real: the
-    /// game's name, one quiet tagline, and an understated menu. Deliberately
-    /// bare; the silence is part of the grief.
-    ///
-    /// This is normally its own Scene, with no player in it. Drop this script on
-    /// an empty GameObject; it builds its own Canvas, shows the cursor, and
-    /// creates an EventSystem if the scene doesn't have one.
-    ///
-    /// "New game" / "Continue" load a scene by name — set the names in the
-    /// Inspector and add those scenes to File > Build Settings. If a scene isn't
-    /// added yet, the button logs a gentle reminder instead of crashing.
-    /// </summary>
     public class TitleScreen : MonoBehaviour
     {
         [Header("Text")]

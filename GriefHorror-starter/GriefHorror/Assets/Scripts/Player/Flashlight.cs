@@ -3,19 +3,6 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.Player
 {
-    /// <summary>
-    /// A handheld light the player can toggle (default: F). It is not a reliable
-    /// comfort: as grief rises the beam weakens and flickers harder, so the more
-    /// the player runs, the less they can see. The light failing is one more
-    /// quiet pressure pushing them to stop and face things instead of fleeing.
-    ///
-    /// Setup is just: drop this script on the player Camera. It creates its own
-    /// Spotlight at runtime, so no manual Light is required. If you'd rather
-    /// control an existing Light yourself, assign it to <see cref="beam"/>.
-    ///
-    /// Degrades gracefully: if there is no GriefMeter in the scene, the light
-    /// still works — it just won't react to grief.
-    /// </summary>
     public class Flashlight : MonoBehaviour
     {
         [Header("Input")]
