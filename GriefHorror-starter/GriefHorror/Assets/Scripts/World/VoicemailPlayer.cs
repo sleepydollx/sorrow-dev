@@ -7,15 +7,6 @@ using GriefHorror.UI;
 
 namespace GriefHorror.World
 {
-    /// <summary>
-    /// Plays a voicemail: audio clip + timed subtitle lines through GameHUD.
-    /// Put this on the answering machine / phone object and call Play() from
-    /// your Interactable (via UnityEvent in the Inspector, or from code).
-    ///
-    /// Theme note: a voicemail only "counts" if it's heard to the end.
-    /// Walking away (or calling Stop) interrupts it — onFinished never fires,
-    /// and the player has to come back and face it again from the start.
-    /// </summary>
     [RequireComponent(typeof(AudioSource))]
     public class VoicemailPlayer : MonoBehaviour
     {
