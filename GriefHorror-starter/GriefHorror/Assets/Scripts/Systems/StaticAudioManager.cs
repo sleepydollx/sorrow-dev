@@ -14,9 +14,9 @@ namespace GriefHorror.Systems
 
         [Header("Levels")]
         [Tooltip("Hiss volume at grief = 0. A faint bed so silence never feels safe.")]
-        [SerializeField, Range(0f, 1f)] private float hissFloor = 0.03f;
+        [SerializeField, Range(0f, 1f)] private float hissFloor = 0.5f;
         [Tooltip("Hiss volume at grief = 1.")]
-        [SerializeField, Range(0f, 1f)] private float hissCeiling = 0.65f;
+        [SerializeField, Range(0f, 1f)] private float hissCeiling = 0.6f;
         [Tooltip("Rumble volume at grief = 1 (it fades in only past mid grief).")]
         [SerializeField, Range(0f, 1f)] private float rumbleCeiling = 0.5f;
 
@@ -57,8 +57,6 @@ namespace GriefHorror.Systems
 
         private void Update()
         {
-            // Duck multiplier eases toward its target (unscaled: keeps moving
-            // even if something pauses timescale without pausing audio).
             _duckMultiplier = Mathf.MoveTowards(
                 _duckMultiplier, _duckTarget, _duckSpeed * Time.unscaledDeltaTime);
 
@@ -88,7 +86,7 @@ namespace GriefHorror.Systems
         {
             CurrentGrief = Mathf.Clamp01(normalized);
         }
-        public void Duck(float toFraction = 0.15f, float overSeconds = 1.5f)
+         public void Duck(float toFraction = 0.15f, float overSeconds = 1.5f)
         {
             _duckTarget = Mathf.Clamp01(toFraction);
             _duckSpeed = Mathf.Abs(_duckMultiplier - _duckTarget) / Mathf.Max(overSeconds, 0.01f);
@@ -116,7 +114,7 @@ namespace GriefHorror.Systems
             source.loop = true;
             source.playOnAwake = false;
             source.spatialBlend = 0f;   // the static is not in the room — it's in your head
-            source.volume = 0f;
+            source.volume = 10f;
             source.Play();
             return source;
         }
