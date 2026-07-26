@@ -86,9 +86,8 @@ namespace GriefHorror.Entity
             }
         }
 
-        // ---------- Public API ----------
+        // Public API
 
-        /// <summary>Wake it. Call from a trigger zone, GameManager beat, or scripted moment.</summary>
         public void Manifest(Vector3 position)
         {
             transform.position = position;
@@ -98,18 +97,16 @@ namespace GriefHorror.Entity
             onPursuitStarted?.Invoke();
         }
 
-        /// <summary>Convenience overload: manifest at its current position.</summary>
         public void Manifest() => Manifest(transform.position);
 
-        /// <summary>Send it away without completing the encounter (scripted moments, scene changes).</summary>
-        public void Banish()
+        public void Dissipate()
         {
             if (CurrentState == State.Dormant || CurrentState == State.Dissipating)
                 return;
             StartCoroutine(DissipateRoutine(witnessed: false));
         }
 
-        // ---------- State ticks ----------
+        // State Ticks
 
         private void TickPursuing()
         {
@@ -181,7 +178,7 @@ namespace GriefHorror.Entity
             }
         }
 
-        // ---------- Internals ----------
+        // Internals
 
         private void TrackPlayerSpeed()
         {
