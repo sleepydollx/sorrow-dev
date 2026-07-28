@@ -50,12 +50,9 @@ namespace GriefHorror.UI
         {
             _camera = Camera.main;
 
-            // Marks are built here (not Awake) so the count can follow the
-            // GameManager once it exposes one, e.g.:
-            // if (GameManager.Instance != null)
-            //     voicemailMarks = GameManager.Instance.TruthsToFaceForEnding;
             BuildMarks();
             RefreshMarks();
+            BuildMarks(); 
 
             if (GameManager.Instance != null)
                 GameManager.Instance.OnVoicemailProgressed += OnVoicemailProgressed;
@@ -104,7 +101,7 @@ namespace GriefHorror.UI
 
         // ---------- Subtitles ----------
 
-        /// <summary>Show a line of subtitle text for a few seconds.</summary>
+        /// <summary> Show a line of subtitle text for a few seconds.</summary>
         public void ShowSubtitle(string line, float seconds = 5f)
         {
             if (_subtitleText == null)
@@ -169,6 +166,7 @@ namespace GriefHorror.UI
             rr.pivot = new Vector2(0.5f, 0.5f);
             rr.sizeDelta = new Vector2(6f, 6f);
             rr.anchoredPosition = Vector2.zero;
+            rr.localRotation = new Quaternion(0f, 0f, 0f, 1f);
 
             // Voicemail marks container — marks themselves are built in Start.
             _marksParent = new GameObject("VoicemailMarks").AddComponent<RectTransform>();

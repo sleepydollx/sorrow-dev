@@ -11,17 +11,15 @@ namespace GriefHorror.Systems
         [Tooltip("How many memories must be confronted before the voicemail is whole.")]
         [SerializeField] private int truthsToFaceForEnding = 5;
 
-        /// <summary>Number of memories confronted so far.</summary>
         public int TruthsFaced { get; private set; }
 
-        /// <summary>Voicemail completeness, 0..1.</summary>
         public float VoicemailProgress =>
             truthsToFaceForEnding <= 0 ? 1f : Mathf.Clamp01((float)TruthsFaced / truthsToFaceForEnding);
 
-        /// <summary>Fired each time a truth is faced. Argument is the new voicemail progress 0..1.</summary>
+        /// Fired each time a truth is faced. Argument is the new voicemail progress 0..1.
         public event Action<float> OnVoicemailProgressed;
 
-        /// <summary>Fired once, when the last truth is faced and the message is finally whole.</summary>
+        /// Fired once, when the last truth is faced and the message is finally whole.
         public event Action OnStoryComplete;
 
         private bool _completed;
@@ -36,7 +34,7 @@ namespace GriefHorror.Systems
             Instance = this;
         }
 
-        /// <summary>Called by a MemoryObject when the player confronts it.</summary>
+        /// Called by a MemoryObject when the player confronts it.
         public void RegisterTruthFaced()
         {
             if (_completed)

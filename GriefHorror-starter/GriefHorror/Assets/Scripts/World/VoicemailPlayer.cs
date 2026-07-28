@@ -20,7 +20,7 @@ namespace GriefHorror.World
             public string text;
 
             [Tooltip("How long the line stays on screen.")]
-            public float duration = 4f;
+            public float duration = 5f;
         }
 
         [Header("Voicemail")]
@@ -82,7 +82,6 @@ namespace GriefHorror.World
             _playRoutine = StartCoroutine(PlayRoutine());
         }
 
-        /// <summary>Interrupt playback (e.g. player ran, or a chase started).</summary>
         public void Stop()
         {
             if (!IsPlaying)
@@ -98,7 +97,7 @@ namespace GriefHorror.World
             onInterrupted?.Invoke();
         }
 
-        // ---------- Internals ----------
+        // Internals
 
         private IEnumerator PlayRoutine()
         {
