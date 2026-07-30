@@ -208,8 +208,6 @@ namespace GriefHorror.Entity
 
             if (witnessed)
                 onWitnessed?.Invoke();
-
-            // Hand the fade to your VFX via onDissipated, or scale-out as a fallback.
             onDissipated?.Invoke();
 
             float t = 0f;
