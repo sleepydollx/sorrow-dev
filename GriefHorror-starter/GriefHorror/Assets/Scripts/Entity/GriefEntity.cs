@@ -50,6 +50,7 @@ namespace GriefHorror.Entity
 
             float grief = GriefMeter.Instance != null ? GriefMeter.Instance.Grief : 0f;
             float speed = baseSpeed + griefSpeedBonus * grief;
+            float dist = Vector3.Distance(transform.position, target.position);
 
             Vector3 targetOnPlane = new Vector3(target.position.x, transform.position.y, target.position.z);
             transform.position = Vector3.MoveTowards(transform.position, targetOnPlane, speed * Time.deltaTime);

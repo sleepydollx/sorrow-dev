@@ -114,7 +114,6 @@ namespace GriefHorror.Entity
 
             if (dist > loseDistance)
             {
-                // Ran far enough. It stops following — for now. That is not victory.
                 StartCoroutine(DissipateRoutine(witnessed: false));
                 return;
             }
@@ -227,6 +226,12 @@ namespace GriefHorror.Entity
 
         private void SetStateInternalDissipating()
         {
+           CurrentState = State.Dissipating;
+           _agent.ResetPlayer();
+           if (motion != null)
+                 animator.SetBool("Walking", true);
+                // nanti ganti kalo arrays nya udah bener
+                
             CurrentState = State.Dissipating;
             _agent.ResetPath();
             if (animator != null)
