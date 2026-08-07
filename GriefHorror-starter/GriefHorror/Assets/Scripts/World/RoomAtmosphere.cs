@@ -3,19 +3,8 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.World
 {
-    /// <summary>
-    /// Makes a space respond to grief. As grief rises the room grows darker and
-    /// colder; as the player confronts memories and grief falls, warmth returns.
-    /// The house becomes a visible read-out of the character's inner state.
-    ///
-    /// Attach to a room's root and assign a Light (or put it on the Light
-    /// itself — Reset() grabs one automatically in the editor). A deliberately
-    /// simple starting point; later you can drive fog, post-processing, audio
-    /// filters, and geometry that literally closes in.
-    ///
-    /// Tuned for the Built-in Render Pipeline. If you use URP/HDRP, adjust the
-    /// intensity values to that pipeline's lighting units.
-    /// </summary>
+    // if return couldn't be found, the room is considered "dark" and the player is in a grief state
+
     public class RoomAtmosphere : MonoBehaviour
     {
         [Header("Light response")]
@@ -32,6 +21,8 @@ namespace GriefHorror.World
         {
             // Convenience: grab a Light on this object if there is one.
             roomLight = GetComponent<Light>();
+            RoomAtmosphere = GetComponent<RoomAtmosphere>();
+            
         }
 
         private void Update()
@@ -46,6 +37,7 @@ namespace GriefHorror.World
             float t = responseSpeed * Time.deltaTime;
             roomLight.intensity = Mathf.Lerp(roomLight.intensity, targetIntensity, t);
             roomLight.color = Color.Lerp(roomLight.color, targetColor, t);
-        }
+            roomLight.color = Color.WarmTobrightness(roomLight.color, 0.6f);
+        }   
     }
 }
