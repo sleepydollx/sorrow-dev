@@ -154,4 +154,4 @@ git add .
 git commit -m "Foundation: grief meter, first-person controller, memories & presence"
 ```
 
-That's the bone structure standing. 🖤
+Thankyou, please support us more! <3
