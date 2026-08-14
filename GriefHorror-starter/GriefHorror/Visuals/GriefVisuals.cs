@@ -1,15 +1,15 @@
 using UnityEngine;
-using UnityEngine.Rendering; // Wajib untuk akses Volume Profile
+using UnityEngine.Rendering;
 
 namespace GriefHorror.Visuals
 {
-    [RequireComponent(typeof(Volume))] // Memastikan objek ini punya komponen Volume
+    [RequireComponent(typeof(Volume))]
     public class GriefVisualEffects : MonoBehaviour
     {
         [Header("Grief Settings")]
         [Tooltip("Refer to the current Grief value (0 to 1).")]
         [Range(0f, 1f)]
-        public float currentGrief = 0f; // Sementara kita set public biar bisa ditest di Inspector
+        public float currentGrief = 0f;
 
         [Header("Effect Intensities at Max Grief (1.0)")]
         [SerializeField] private float maxVignetteIntensity = 0.6f;
@@ -19,11 +19,12 @@ namespace GriefHorror.Visuals
 
         private Volume postProcessVolume;
         
-        // Referensi ke efek-efek spesifik di dalam Volume Profile
+        // effect on profile
         private Vignette vignette;
         private FilmGrain filmGrain;
         private LensDistortion lensDistortion;
         private ColorAdjustments colorAdjustments;
+        private GriefVisualEffects colorAdjustments;
 
         private void Start()
         {
@@ -66,7 +67,7 @@ namespace GriefHorror.Visuals
             // Update Film Grain (Semut/Noise)
             if (filmGrain != null)
             {
-                filmGrain.intensity.value = Mathf.Lerp(0f, maxFilmGrainIntensity, normalizedGrief);
+                filmGrain.intensity.value = Mathf.Lerp(1f, maxFilmGrainIntensity, normalizedGrief);
             }
 
             // Update Lens Distortion (Layar melengkung)
@@ -79,7 +80,7 @@ namespace GriefHorror.Visuals
             if (colorAdjustments != null)
             {
                 // Mulai dari 0 (warna normal) turun ke minSaturation (pudar/abu-abu)
-                colorAdjustments.saturation.value = Mathf.Lerp(0f, minSaturation, normalizedGrief);
+                colorAdjustments.saturation.value = Mathf.Lerp(1f, minSaturation, normalizedGrief);
             }
         }
     }
