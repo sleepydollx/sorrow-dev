@@ -15,7 +15,7 @@ namespace GriefHorror.Entity
         [Tooltip("Must match (or sit just under) the player's WALK speed. It never moves faster than this.")]
         [SerializeField] private float walkSpeed = 2.0f;
 
-        [Header("Encounter distances")]
+        [Header("Encounter Distances")]
         [Tooltip("Closer than this, it stops walking and reaches out instead.")]
         [SerializeField] private float reachDistance = 2.2f;
         [Tooltip("Farther than this, it loses the thread and dissipates on its own.")]
@@ -81,8 +81,8 @@ namespace GriefHorror.Entity
 
             switch (CurrentState)
             {
-                case State.Pursuing:  TickPursuing();  break;
-                case State.Reaching:  TickReaching();  break;
+                case State.Pursuing: TickPursuing(); break;
+                case State.Reaching: TickReaching(); break;
             }
         }
 
@@ -197,6 +197,7 @@ namespace GriefHorror.Entity
                 {
                     animator.SetBool("Walking", false);
                     animator.SetTrigger("Reach");
+                    animator.SetTrigger("Fall");
                 }
             }
         }
@@ -208,6 +209,8 @@ namespace GriefHorror.Entity
             if (witnessed)
                 onWitnessed?.Invoke();
             onDissipated?.Invoke();
+            if (animator != null)
+                animator.SetTrigger("Walking");
 
             float t = 0f;
             Vector3 startScale = transform.localScale;
@@ -226,16 +229,11 @@ namespace GriefHorror.Entity
 
         private void SetStateInternalDissipating()
         {
-           CurrentState = State.Dissipating;
-           _agent.ResetPlayer();
-           if (motion != null)
-                 animator.SetBool("Walking", true);
-                // nanti ganti kalo arrays nya udah bener
-                
             CurrentState = State.Dissipating;
             _agent.ResetPath();
             if (animator != null)
                 animator.SetBool("Walking", false);
+                animator.SetTrigger("Fall", true);
         }
     }
 }
