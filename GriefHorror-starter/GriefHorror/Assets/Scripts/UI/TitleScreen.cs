@@ -29,7 +29,6 @@ namespace GriefHorror.UI
             _font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
             EnsureEventSystem();
 
-            // A menu needs a visible, free cursor (gameplay locks it; here we don't).
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
@@ -38,7 +37,8 @@ namespace GriefHorror.UI
 
         private void EnsureEventSystem()
         {
-            if (FindObjectOfType<EventSystem>() == null)
+            // Menggunakan FindAnyObjectByType sebagai pengganti FindObjectOfType yang sudah deprecated di Unity modern
+            if (FindAnyObjectByType<EventSystem>() == null)
             {
                 var es = new GameObject("EventSystem");
                 es.AddComponent<EventSystem>();
@@ -124,7 +124,6 @@ namespace GriefHorror.UI
 #endif
         }
 
-        // ---------- small UI helpers ----------
 
         private Image NewImage(Transform parent, Color color)
         {
