@@ -32,6 +32,14 @@ namespace GriefHorror.UI
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
+            if (Cursor.lockState != CursorLockMode.None)
+            {
+                Cursor.lockState = CursorLockMode.None;
+
+                debug.LogWarning("TitleScreen: Cursor.Lockstate");
+                true;
+            }
+
             BuildUI();
         }
 

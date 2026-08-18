@@ -50,7 +50,7 @@ namespace GriefHorror.Entity
 
         private void Update()
         {
-            // Kalau player null (misal baru mati/respawn), coba cari lagi
+            
             if (player == null)
             {
                 FindPlayer();
@@ -62,6 +62,8 @@ namespace GriefHorror.Entity
             UpdateSpeed();
             UpdatePath();
             CheckEmbrace();
+            UpdateAnimation();
+            UpdateCursor();
         }
 
         private void UpdateSpeed()
@@ -93,8 +95,6 @@ namespace GriefHorror.Entity
                 hasEmbraced = true;
                 agent.isStopped = true;
 
-                // Placeholder — hook into the real OnEmbrace event from
-                // GriefEntity/GriefMeter once wired up.
                 Debug.Log("[GriefEntityNavPursuit] Embrace reached.");
             }
         }
