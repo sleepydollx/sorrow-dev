@@ -148,16 +148,14 @@ namespace GriefHorror.Entity
         {
             float dist = Vector3.Distance(transform.position, player.position);
 
-            // Player pulled away again — resume the slow walk. The timer resets:
-            // witnessing cannot be done in installments.
             if (dist > reachDistance * 1.5f)
             {
                 _witnessTimer = 0f;
                 SetState(State.Pursuing);
+                setStateEnabled(true);
                 return;
             }
 
-            // Face the player. The hand stays open.
             Vector3 look = player.position - transform.position;
             look.y = 0f;
             if (look.sqrMagnitude > 0.001f)
