@@ -16,7 +16,6 @@ namespace GriefHorror.World
 
         public bool Confronted { get; private set; }
 
-        /// <summary>Fired when this memory is confronted for the first time. Hook visuals/audio here.</summary>
         public event Action OnConfronted;
 
         public override void Interact()
