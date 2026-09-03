@@ -51,6 +51,13 @@ namespace GriefHorror.Visuals
             // Contoh: if (GriefMeter.Instance != null) currentGrief = GriefMeter.Instance.CurrentGrief;
             
             UpdateVisualEffects(currentGrief);
+            updateGriefVisuals(currentGrief);
+            if (currentGrief >= 5f)
+            {
+                currentGrief = 5f;
+                state = griefstate.Overwhelmed; 
+                state = Mathf.Clamp(state, griefstate.Overwhelmed, griefstate.Overwhelmed);
+            }
         }
 
         private void UpdateVisualEffects(float griefValue)
