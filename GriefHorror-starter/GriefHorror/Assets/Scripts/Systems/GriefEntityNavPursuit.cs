@@ -25,16 +25,17 @@ namespace GriefHorror.Entity
 
         private NavMeshAgent agent;
         private Transform player;
+        private Animator anim; // Tambahan buat nyambungin ke animasi
         private float repathTimer;
         private bool hasEmbraced;
 
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            anim = GetComponentInChildren<Animator>(); // Nyari komponen Animator di model hantunya
             FindPlayer();
         }
 
-        // Dipisah jadi fungsi biar bisa dipanggil ulang kalau player respawn
         private void FindPlayer() 
         {
             var playerObj = GameObject.FindGameObjectWithTag("Player");
@@ -50,7 +51,6 @@ namespace GriefHorror.Entity
 
         private void Update()
         {
-            
             if (player == null)
             {
                 FindPlayer();
@@ -64,6 +64,7 @@ namespace GriefHorror.Entity
             CheckEmbrace();
             UpdateAnimation();
             UpdateCursor();
+            UpdatePlugins();
         }
 
         private void UpdateSpeed()
@@ -88,21 +89,43 @@ namespace GriefHorror.Entity
 
         private void CheckEmbrace()
         {
-            // OPTIMASI: Pakai sqrMagnitude lebih ringan daripada Vector3.Distance
             float sqrDistance = (transform.position - player.position).sqrMagnitude;
             if (sqrDistance <= embraceDistance * embraceDistance)
             {
                 hasEmbraced = true;
                 agent.isStopped = true;
 
+                // Muka hantunya udah di depan mata, lepasin kursor biar player bisa klik "Restart" atau sejenisnya
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+
                 Debug.Log("[GriefEntityNavPursuit] Embrace reached.");
+            }
+        }
+
+        private void UpdateAnimation()
+        {
+            if (anim != null)
+            {
+                // Ngirim kecepatan asli pergerakan hantu ke Animator
+                anim.SetFloat("Speed", agent.velocity.magnitude);
+            }
+        }
+
+        private void UpdateCursor()
+        {
+            // Ngunci kursor di tengah layar selama player lagi dikejar-kejar
+            if (!hasEmbraced)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
         }
 
         public void ResetPursuit()
         {
             hasEmbraced = false;
-            repathTimer = 0f; // OPTIMASI: Paksa agen untuk langsung mencari rute baru
+            repathTimer = 0f; 
             
             if (agent != null && agent.isOnNavMesh)
             {
