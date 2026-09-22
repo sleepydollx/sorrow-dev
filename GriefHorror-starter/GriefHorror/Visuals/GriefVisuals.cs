@@ -30,10 +30,8 @@ namespace GriefHorror.Visuals
         {
             postProcessVolume = GetComponent<Volume>();
 
-            // Mengambil profil Post-Processing yang aktif di Volume ini
             if (postProcessVolume.profile != null)
             {
-                // Mencoba mencari efek-efek ini di dalam profile
                 postProcessVolume.profile.TryGet(out vignette);
                 postProcessVolume.profile.TryGet(out filmGrain);
                 postProcessVolume.profile.TryGet(out lensDistortion);
@@ -47,7 +45,7 @@ namespace GriefHorror.Visuals
 
         private void Update()
         {
-            // TODO: Nanti sambungkan ini dengan sistem GriefMeter yang sebenarnya.
+            // TODO: nanti sambungin ini dengan sistem GriefMeter yang sebenarnya.
             // Contoh: if (GriefMeter.Instance != null) currentGrief = GriefMeter.Instance.CurrentGrief;
             
             UpdateVisualEffects(currentGrief);
@@ -65,28 +63,23 @@ namespace GriefHorror.Visuals
             // Pastikan nilai grief selalu antara 0 dan 1
             float normalizedGrief = Mathf.Clamp01(griefValue);
 
-            // Update Vignette (Pinggiran gelap)
             if (vignette != null)
             {
                 vignette.intensity.value = Mathf.Lerp(0f, maxVignetteIntensity, normalizedGrief);
             }
 
-            // Update Film Grain (Semut/Noise)
             if (filmGrain != null)
             {
                 filmGrain.intensity.value = Mathf.Lerp(1f, maxFilmGrainIntensity, normalizedGrief);
             }
 
-            // Update Lens Distortion (Layar melengkung)
             if (lensDistortion != null)
             {
                 lensDistortion.intensity.value = Mathf.Lerp(0f, maxLensDistortion, normalizedGrief);
             }
 
-            // Update Color Adjustments (Warna memudar)
             if (colorAdjustments != null)
             {
-                // Mulai dari 0 (warna normal) turun ke minSaturation (pudar/abu-abu)
                 colorAdjustments.saturation.value = Mathf.Lerp(1f, minSaturation, normalizedGrief);
             }
         }
