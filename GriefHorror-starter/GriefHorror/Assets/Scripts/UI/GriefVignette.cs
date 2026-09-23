@@ -61,10 +61,6 @@ namespace GriefHorror.UI
             _current = minStrength;
         }
 
-        /// <summary>
-        /// Bakes a radial gradient: transparent at the center, opaque toward the
-        /// edges, tinted with <see cref="vignetteColor"/>. Runs once at startup.
-        /// </summary>
         private Sprite BuildRadialSprite(int size)
         {
             var tex = new Texture2D(size, size, TextureFormat.RGBA32, false)
