@@ -81,7 +81,6 @@ namespace GriefHorror.Systems
 
         // ---------- Public API ----------
 
-        /// <summary>Feed the current grief value (0..1). Call from GriefMeter.</summary>
         public void SetGrief(float normalized)
         {
             CurrentGrief = Mathf.Clamp01(normalized);
@@ -92,7 +91,6 @@ namespace GriefHorror.Systems
             _duckSpeed = Mathf.Abs(_duckMultiplier - _duckTarget) / Mathf.Max(overSeconds, 0.01f);
         }
 
-        /// <summary>Bring the static back to its grief-driven level.</summary>
         public void Restore(float overSeconds = 2.5f)
         {
             _duckTarget = 1f;

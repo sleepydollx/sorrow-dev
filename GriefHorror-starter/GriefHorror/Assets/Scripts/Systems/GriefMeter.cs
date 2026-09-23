@@ -17,10 +17,8 @@ namespace GriefHorror.Systems
         [Tooltip("How much grief a single confronted memory removes.")]
         [SerializeField] private float reliefPerConfrontation = 0.25f;
 
-        /// <summary>Current grief, always clamped 0..1.</summary>
         public float Grief { get; private set; }
 
-        /// <summary>Fired whenever grief changes. Argument is the new 0..1 value.</summary>
         public event Action<float> OnGriefChanged;
 
         private bool _isFleeingThisFrame;

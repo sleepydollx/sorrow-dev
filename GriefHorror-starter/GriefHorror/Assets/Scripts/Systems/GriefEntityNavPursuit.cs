@@ -25,14 +25,14 @@ namespace GriefHorror.Entity
 
         private NavMeshAgent agent;
         private Transform player;
-        private Animator anim; // Tambahan buat nyambungin ke animasi
+        private Animator anim;
         private float repathTimer;
         private bool hasEmbraced;
 
         private void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
-            anim = GetComponentInChildren<Animator>(); // Nyari komponen Animator di model hantunya
+            anim = GetComponentInChildren<Animator>();
             FindPlayer();
         }
 
@@ -95,7 +95,6 @@ namespace GriefHorror.Entity
                 hasEmbraced = true;
                 agent.isStopped = true;
 
-                // Muka hantunya udah di depan mata, lepasin kursor biar player bisa klik "Restart" atau sejenisnya
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
 
@@ -114,7 +113,6 @@ namespace GriefHorror.Entity
 
         private void UpdateCursor()
         {
-            // Ngunci kursor di tengah layar selama player lagi dikejar-kejar
             if (!hasEmbraced)
             {
                 Cursor.lockState = CursorLockMode.Locked;
