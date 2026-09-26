@@ -9,7 +9,6 @@ namespace GriefHorror.World
 
         public string Prompt => prompt;
 
-        /// <summary>Called when the player interacts with this object.</summary>
         public abstract void Interact();
     }
 }
