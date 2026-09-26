@@ -63,7 +63,7 @@ namespace GriefHorror.Player
 
             float grief = GriefMeter.Instance != null ? GriefMeter.Instance.Grief : 0f;
 
-            // Dim as grief rises.
+            // Dim as grief rises
             float target = baseIntensity * (1f - griefDimming * grief);
 
             // Flicker harder as grief rises. Perlin noise gives an organic, flame-like unsteadiness.
@@ -80,5 +80,81 @@ namespace GriefHorror.Player
             if (beam != null)
                 beam.enabled = on;
         }
+    }
+}
+
+
+public class Flashlight : MonoBehaviour
+{
+    [Header("Flashlight Settings")]
+    public GameObject flashlightLight; // Referensi objek Light/Spotlight
+    public float maxBatteryLife = 100f;
+    public float currentBattery;
+    public float drainRate = 5f; // Kecepatan baterai berkurang per detik saat menyala
+    
+    private bool isOn = false;
+
+    void Start()
+    {
+        currentBattery = maxBatteryLife;
+        if (flashlightLight != null)
+            flashlightLight.SetActive(isOn);
+    }
+
+    void Update()
+    {
+        // Menyalakan/mematikan senter dengan tombol F
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            ToggleFlashlight();
+        }
+
+        if (isOn)
+        {
+            currentBattery -= drainRate * Time.deltaTime;
+            if (currentBattery <= 0)
+            {
+                currentBattery = 0;
+                TurnOff();
+            }
+        }
+    }
+
+    void ToggleFlashlight()
+    {
+        if (isOn)
+        {
+            TurnOff();
+        }
+        else
+        {
+            if (currentBattery > 0)
+            {
+                TurnOn();
+            }
+        }
+    }
+
+    public void TurnOn()
+    {
+        isOn = true;
+        if (flashlightLight != null) flashlightLight.SetActive(true);
+    }
+
+    public void TurnOff()
+    {
+        isOn = false;
+        if (flashlightLight != null) flashlightLight.SetActive(false);
+    }
+
+    // Fungsi untuk mengisi ulang baterai
+    public void AddBattery(float amount)
+    {
+        currentBattery += amount;
+        if (currentBattery > maxBatteryLife)
+        {
+            currentBattery = maxBatteryLife;
+        }
+        Debug.Log("Baterai bertambah! Sisa baterai: " + currentBattery);
     }
 }
