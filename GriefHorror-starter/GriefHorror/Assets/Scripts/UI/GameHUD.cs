@@ -99,7 +99,6 @@ namespace GriefHorror.UI
             _promptText.gameObject.SetActive(false);
         }
 
-        // ---------- Subtitles ----------
 
         /// <summary> Show a line of subtitle text for a few seconds.</summary>
         public void ShowSubtitle(string line, float seconds = 5f)
