@@ -16,7 +16,6 @@ namespace GriefHorror.Systems
         public float VoicemailProgress =>
             truthsToFaceForEnding <= 0 ? 1f : Mathf.Clamp01((float)TruthsFaced / truthsToFaceForEnding);
 
-        /// Fired each time a truth is faced. Argument is the new voicemail progress 0..1.
         public event Action<float> OnVoicemailProgressed;
 
         /// Fired once, when the last truth is faced and the message is finally whole.

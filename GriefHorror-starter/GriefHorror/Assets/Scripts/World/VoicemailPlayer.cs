@@ -111,6 +111,7 @@ namespace GriefHorror.World
 
             _source.clip = clip;
             _source.Play();
+            _source.Loop = false;
 
             float elapsed = 0f;
             int nextLine = 0;
