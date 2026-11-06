@@ -1,108 +1,97 @@
-using System.Collections;
+using System;
 using UnityEngine;
+using GriefHorror.Systems;
 
-namespace GriefHorror.Systems
+namespace GriefHorror.Entity
 {
-    public class VoicemailAudioSystem : MonoBehaviour
+    public class GriefEntity : MonoBehaviour
     {
-        [Header("Audio")]
-        [SerializeField] private AudioSource audioSource;
+        [Header("Target")]
+        [SerializeField] private Transform target;
 
-        [Tooltip("One clip per memory faced, in order. Length should match GameManager's Truths To Face For Ending.")]
-        [SerializeField] private AudioClip[] voicemailSegments;
+        [Header("Movement")]
+        [SerializeField] private float baseSpeed = 0.6f;
+        [SerializeField] private float griefSpeedBonus = 2.2f;
+        [SerializeField] private float embraceDistance = 1.2f;
+        [SerializeField] private float turnSpeed = 5f;
 
-        [Tooltip("Optional short static/tape-hiss stinger played right before each new segment.")]
-        [SerializeField] private AudioClip segmentIntroStinger;
+        [Header("After an embrace")]
+        [SerializeField] private float embracePause = 3f;
+        [Tooltip("Player must get this many times embraceDistance away before it can embrace again.")]
+        [SerializeField] private float rearmMultiplier = 2f;
 
-        [Header("Timing")]
-        [Tooltip("Silence between the stinger and the segment itself.")]
-        [SerializeField] private float stingerToSegmentDelay = 0.4f;
+        public event Action OnEmbrace;
 
-        private int lastPlayedSegmentIndex = -1;
-        private Coroutine playbackRoutine;
+        private float _pauseTimer;
+        private bool _embraced;
+        private bool _warnedNoMeter;
 
-        private void OnEnable()
+        private void Awake() => TryFindTarget();
+
+        private void TryFindTarget()
         {
-            if (GameManager.Instance != null)
-            {
-                GameManager.Instance.OnVoicemailProgressed += HandleVoicemailProgressed;
-            }
-
-            if (audioSource == null)
-            {
-                audioSource = GetComponent<AudioSource>();
-            }
+            var player = GameObject.FindWithTag("Player");
+            if (player != null)
+                target = player.transform;
         }
 
-        private void OnDisable()
+        private void Update()
         {
-            if (GameManager.Instance != null)
+            if (target == null)
             {
-                GameManager.Instance.OnVoicemailProgressed -= HandleVoicemailProgressed;
+                TryFindTarget(); // player may spawn after Awake
+                if (target == null) return;
             }
+
+            if (_pauseTimer > 0f)
+            {
+                _pauseTimer -= Time.deltaTime;
+                return;
+            }
+
+            Vector3 targetOnPlane = new Vector3(target.position.x, transform.position.y, target.position.z);
+            float planarDist = Vector3.Distance(transform.position, targetOnPlane);
+
+            // One embrace per approach: wait for the player to move away before re-arming.
+            if (_embraced)
+            {
+                if (planarDist > embraceDistance * rearmMultiplier)
+                    _embraced = false;
+                else
+                    return;
+            }
+
+            if (planarDist <= embraceDistance)
+            {
+                Embrace();
+                return;
+            }
+
+            float grief = 0f;
+            if (GriefMeter.Instance != null)
+            {
+                grief = Mathf.Clamp01(GriefMeter.Instance.Grief); // assumes 0..1; divide first if yours is 0..100
+            }
+            else if (!_warnedNoMeter)
+            {
+                Debug.LogWarning("[GriefEntity] GriefMeter.Instance is null; using 0 grief.", this);
+                _warnedNoMeter = true;
+            }
+
+            float speed = baseSpeed + griefSpeedBonus * grief;
+            transform.position = Vector3.MoveTowards(transform.position, targetOnPlane, speed * Time.deltaTime);
+
+            Vector3 look = targetOnPlane - transform.position;
+            if (look.sqrMagnitude > 0.001f)
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(look), turnSpeed * Time.deltaTime);
         }
 
-        private void HandleVoicemailProgressed(int segmentsUnlocked)
+        private void Embrace()
         {
-            // segmentsUnlocked is 1-based (1 = first memory faced, etc.)
-            int index = segmentsUnlocked - 1;
-
-            if (index < 0 || index >= voicemailSegments.Length) return;
-            if (index <= lastPlayedSegmentIndex) return; // already played, avoid re-trigger on reload/replay
-
-            lastPlayedSegmentIndex = index;
-
-            if (playbackRoutine != null)
-            {
-                StopCoroutine(playbackRoutine);
-            }
-            playbackRoutine = StartCoroutine(PlaySegment(index));
-        }
-
-        private IEnumerator PlaySegment(int index)
-        {
-            AudioClip clip = voicemailSegments[index];
-            bool isFinalSegment = index == voicemailSegments.Length - 1;
-
-            if (segmentIntroStinger != null)
-            {
-                audioSource.PlayOneShot(segmentIntroStinger);
-                yield return new WaitForSeconds(segmentIntroStinger.length + stingerToSegmentDelay);
-            }
-
-            if (clip == null)
-            {
-                Debug.LogWarning($"[VoicemailAudioSystem] Missing clip for segment {index}.");
-                yield break;
-            }
-
-            audioSource.clip = clip;
-            audioSource.Play();
-
-            // Placeholder log — swap for subtitle UI trigger later, matching
-            // the rest of the codebase's Debug.Log-as-scaffolding convention.
-            Debug.Log(isFinalSegment
-                ? "[Voicemail] Final segment playing — the full message."
-                : $"[Voicemail] Segment {index + 1}/{voicemailSegments.Length} playing.");
-
-            yield return new WaitForSeconds(clip.length);
-
-            if (isFinalSegment)
-            {
-                Debug.Log("[Voicemail] Full message heard. Not an accusation.");
-            }
-        }
-
-        /// <summary>Replays the most recently unlocked segment (e.g. for a "listen again" interaction).</summary>
-        public void ReplayLastSegment()
-        {
-            if (lastPlayedSegmentIndex < 0) return;
-
-            if (playbackRoutine != null)
-            {
-                StopCoroutine(playbackRoutine);
-            }
-            playbackRoutine = StartCoroutine(PlaySegment(lastPlayedSegmentIndex));
+            _embraced = true;
+            _pauseTimer = embracePause;
+            Debug.Log("[Presence] It reaches you. An open hand, not a blow.");
+            OnEmbrace?.Invoke();
         }
     }
 }
