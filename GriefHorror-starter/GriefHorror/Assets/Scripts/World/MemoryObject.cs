@@ -1,40 +1,22 @@
-using System;
-using UnityEngine;
-using GriefHorror.Systems;
-
-namespace GriefHorror.World
+public override void Interact()
 {
-    public class MemoryObject : Interactable
+    if (Confronted)
+        return;
+
+    if (GriefMeter.Instance != null)
+        GriefMeter.Instance.GrantRelief();
+    else
+        Debug.LogWarning("[MemoryObject] GriefMeter.Instance is null, no relief granted.", this);
+
+    if (advancesStory)
     {
-        [Header("Memory")]
-        [TextArea]
-        [Tooltip("The line or beat this memory holds. Shown / spoken when confronted.")]
-        [SerializeField] private string memoryLine = "You left this half-finished. You keep meaning to come back to it.";
-
-        [Tooltip("If true, confronting this memory advances the voicemail / story by one step.")]
-        [SerializeField] private bool advancesStory = true;
-
-        public bool Confronted { get; private set; }
-
-        public event Action OnConfronted;
-
-        public override void Interact()
-        {
-            if (Confronted)
-                return;
-
-            Confronted = true;
-
-            // Facing it, instead of fleeing, is what heals.
-            if (GriefMeter.Instance != null)
-                GriefMeter.Instance.GrantRelief();
-
-            if (advancesStory && GameManager.Instance != null)
-                GameManager.Instance.RegisterTruthFaced();
-                
-            Debug.Log($"[Memory] {memoryLine}");
-
-            OnConfronted?.Invoke();
-        }
+        if (GameManager.Instance != null)
+            GameManager.Instance.RegisterTruthFaced();
+        else
+            Debug.LogWarning("[MemoryObject] GameManager.Instance is null, story not advanced.", this);
     }
+
+    Confronted = true; // only after the effects ran
+    Debug.Log($"[Memory] {memoryLine}");
+    OnConfronted?.Invoke();
 }

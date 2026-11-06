@@ -3,8 +3,7 @@ using GriefHorror.Systems;
 
 namespace GriefHorror.World
 {
-    // if return couldn't be found, the room is considered "dark" and the player is in a grief state
-
+    // If the player is in a grief state, the room goes cold and dark.
     public class RoomAtmosphere : MonoBehaviour
     {
         [Header("Light response")]
@@ -19,10 +18,7 @@ namespace GriefHorror.World
 
         private void Reset()
         {
-            // Convenience: grab a Light on this object if there is one.
             roomLight = GetComponent<Light>();
-            RoomAtmosphere = GetComponent<RoomAtmosphere>();
-            
         }
 
         private void Update()
@@ -30,14 +26,13 @@ namespace GriefHorror.World
             if (roomLight == null || GriefMeter.Instance == null)
                 return;
 
-            float grief = GriefMeter.Instance.Grief;
+            float grief = Mathf.Clamp01(GriefMeter.Instance.Grief); // assumes 0..1
             float targetIntensity = Mathf.Lerp(warmIntensity, coldIntensity, grief);
             Color targetColor = Color.Lerp(warmColor, coldColor, grief);
 
             float t = responseSpeed * Time.deltaTime;
             roomLight.intensity = Mathf.Lerp(roomLight.intensity, targetIntensity, t);
             roomLight.color = Color.Lerp(roomLight.color, targetColor, t);
-            roomLight.color = Color.WarmTobrightness(roomLight.color, 0.6f);
-        }   
+        }
     }
 }
