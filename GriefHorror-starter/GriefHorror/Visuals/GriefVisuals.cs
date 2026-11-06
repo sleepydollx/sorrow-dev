@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal; // use HighDefinition instead if you're on HDRP
+using GriefHorror.Systems;
 
 namespace GriefHorror.Visuals
 {
@@ -7,7 +9,7 @@ namespace GriefHorror.Visuals
     public class GriefVisualEffects : MonoBehaviour
     {
         [Header("Grief Settings")]
-        [Tooltip("Refer to the current Grief value (0 to 1).")]
+        [Tooltip("Current grief (0 to 1). Overwritten by GriefMeter if one exists.")]
         [Range(0f, 1f)]
         public float currentGrief = 0f;
 
@@ -15,16 +17,14 @@ namespace GriefHorror.Visuals
         [SerializeField] private float maxVignetteIntensity = 0.6f;
         [SerializeField] private float maxFilmGrainIntensity = 0.8f;
         [SerializeField] private float maxLensDistortion = 0.5f;
-        [SerializeField] private float minSaturation = -80f; // -100 = hitam putih
+        [SerializeField] private float minSaturation = -80f; // -100 = black and white
 
         private Volume postProcessVolume;
-        
-        // effect on profile
+
         private Vignette vignette;
         private FilmGrain filmGrain;
         private LensDistortion lensDistortion;
         private ColorAdjustments colorAdjustments;
-        private GriefVisualEffects colorAdjustments;
 
         private void Start()
         {
@@ -39,49 +39,33 @@ namespace GriefHorror.Visuals
             }
             else
             {
-                Debug.LogError("[GriefVisualEffects] No Volume Profile found on this object!");
+                Debug.LogError("[GriefVisualEffects] No Volume Profile found on this object!", this);
             }
         }
 
         private void Update()
         {
-            // TODO: nanti sambungin ini dengan sistem GriefMeter yang sebenarnya.
-            // Contoh: if (GriefMeter.Instance != null) currentGrief = GriefMeter.Instance.CurrentGrief;
-            
+            if (GriefMeter.Instance != null)
+                currentGrief = GriefMeter.Instance.Grief;
+
             UpdateVisualEffects(currentGrief);
-            updateGriefVisuals(currentGrief);
-            if (currentGrief >= 5f)
-            {
-                currentGrief = 5f;
-                state = griefstate.Overwhelmed; 
-                state = Mathf.Clamp(state, griefstate.Overwhelmed, griefstate.Overwhelmed);
-            }
         }
 
         private void UpdateVisualEffects(float griefValue)
         {
-            // Pastikan nilai grief selalu antara 0 dan 1
-            float normalizedGrief = Mathf.Clamp01(griefValue);
+            float g = Mathf.Clamp01(griefValue);
 
             if (vignette != null)
-            {
-                vignette.intensity.value = Mathf.Lerp(0f, maxVignetteIntensity, normalizedGrief);
-            }
+                vignette.intensity.Override(Mathf.Lerp(0f, maxVignetteIntensity, g));
 
             if (filmGrain != null)
-            {
-                filmGrain.intensity.value = Mathf.Lerp(1f, maxFilmGrainIntensity, normalizedGrief);
-            }
+                filmGrain.intensity.Override(Mathf.Lerp(0f, maxFilmGrainIntensity, g));
 
             if (lensDistortion != null)
-            {
-                lensDistortion.intensity.value = Mathf.Lerp(0f, maxLensDistortion, normalizedGrief);
-            }
+                lensDistortion.intensity.Override(Mathf.Lerp(0f, maxLensDistortion, g));
 
             if (colorAdjustments != null)
-            {
-                colorAdjustments.saturation.value = Mathf.Lerp(1f, minSaturation, normalizedGrief);
-            }
+                colorAdjustments.saturation.Override(Mathf.Lerp(0f, minSaturation, g));
         }
     }
 }
