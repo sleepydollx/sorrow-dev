@@ -25,7 +25,7 @@ namespace GriefHorror.Entity
         [Tooltip("Player must get this many times embraceDistance away before it can embrace again.")]
         [SerializeField] private float rearmMultiplier = 2f;
 
-        /// Fired when the presence reaches the player. Hook the memory beat here.
+        /// Fired when the presence reaches the player. Hook the memory beat here.</summary>
         public event Action OnEmbrace;
 
         private float _pauseTimer;
