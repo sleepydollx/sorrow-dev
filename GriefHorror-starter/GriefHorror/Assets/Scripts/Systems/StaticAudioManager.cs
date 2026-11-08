@@ -97,7 +97,7 @@ namespace GriefHorror.Systems
             _duckSpeed = Mathf.Abs(_duckMultiplier - _duckTarget) / Mathf.Max(overSeconds, 0.01f);
         }
 
-        // ---------- Internals ----------
+        //  Internals 
 
         private AudioSource CreateLoop(string name, AudioClip clip)
         {
