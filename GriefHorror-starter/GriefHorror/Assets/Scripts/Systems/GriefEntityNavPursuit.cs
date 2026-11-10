@@ -128,7 +128,9 @@ namespace GriefHorror.Entity
             if (agent != null && agent.isOnNavMesh)
             {
                 agent.isStopped = false;
-            }
+            } 
+
+            
         }
     }
-}
+} 
