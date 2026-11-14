@@ -111,6 +111,8 @@ namespace GriefHorror.Entity
             }
         }
 
+        
+
         private void UpdateCursor()
         {
             if (!hasEmbraced)
