@@ -111,7 +111,7 @@ namespace GriefHorror.Entity
             }
         }
 
-        
+         
 
         private void UpdateCursor()
         {
@@ -133,6 +133,17 @@ namespace GriefHorror.Entity
             } 
 
             
+        } 
+
+        private void UpdateP()
+        {
+            if (HidingSpot.isPlayerHiding)
+            {
+                (agent != null && agent.isOnNavMesh) ? agent.isStopped = true : 
+                Debug.LogWarning("[GriefEntityNavPursuit] Agent is null or not on NavMesh.");
+            }
+            return;
         }
+
     }
 } 
