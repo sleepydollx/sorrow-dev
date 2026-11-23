@@ -43,6 +43,12 @@ namespace GriefHorror.Entity
         [SerializeField] private float embracePause = 3f;
         [SerializeField] private float rearmMultiplier = 2f;
 
+        [Header("Wander")]
+        [SerializeField] private float wanderRadius = 12f;
+        [SerializeField] private float wanderWait = 3f;
+        [Range(0.1f, 1f)]
+        [SerializeField] private float wanderSpeedMultiplier = 0.6f;
+
         public event Action OnEmbrace;
 
         private NavMeshAgent _agent;
@@ -129,6 +135,8 @@ namespace GriefHorror.Entity
                 }
             }
 
+            if (_hasMemory && !sees && _state != State.Search)
+
             switch (_state)
             {
                 case State.Chase:
@@ -162,6 +170,11 @@ namespace GriefHorror.Entity
                     break;
 
                 case State.Idle:
+                    if (wanderWhenIdle)
+                    {
+                        _agent.speed = fullSpeed * wanderSpeedMultiplier;
+                        TickWander();
+                    }
                     break;
             }
         }
@@ -222,6 +235,21 @@ namespace GriefHorror.Entity
             Debug.Log("[Presence] It reaches you. An open hand, not a blow.");
             OnEmbrace?.Invoke();
         }
+
+        private void TickWander()
+{
+    if (_agent.pathPending) return;
+    if (_agent.hasPath && _agent.remainingDistance > _agent.stoppingDistance + 0.3f) return;
+
+    _waitTimer -= Time.deltaTime;
+    if (_waitTimer > 0f) return;
+    _waitTimer = wanderWait;
+
+    Vector2 offset = UnityEngine.Random.insideUnitCircle * wanderRadius;
+    Vector3 candidate = transform.position + new Vector3(offset.x, 0f, offset.y);
+    if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 3f, NavMesh.AllAreas))
+        _agent.SetDestination(hit.position);
+}
 
         private void OnDrawGizmosSelected()
         {
